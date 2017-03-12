@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <title>Title Page</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/style.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <h1 class="text-center">Participantes</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-2 col-xs-offset-2 col-md-8 col-xs-8 text-center">
+                    <p class="text-info">Separe los participantes con un ENTER</p>
+                    <textarea name="area" id="inputArea" class="form-control" rows="3" required="required"></textarea>
+                    <button type="button" class="btn btn-primary center" name="pair">Hacer Parejas</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-2 col-xs-offset-2 col-md-8 col-xs-8 text-center">
+                    <ul class="list-group" id="pairs">
+                    </ul>
+                </div>
+            </div>
+        </div>
+         <!-- jQuery -->
+        <script src="js/jquery.min.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            $('[name=pair]').click(function(){
+                $('#pairs').empty();
+                var indicator = true;
+                var all = $('#inputArea').val();
+                var players = all.split("\n");
+                var largo = players.length;
+                var selected = new Array(largo);
+                var i = 0;
+                while(indicator){
+                    var random = Math.floor((Math.random()*players.length));
+                        if (selected.indexOf(players[random])==-1) {
+                            if (players[random]=="") {
+                                players.splice(random, 1);    
+                                i=i+1;    
+                            }else{
+                                selected[i] = players[random].toUpperCase();
+                                players.splice(random, 1);
+                                i=i+1;    
+                            }   
+                        }
+                        if (i==largo) {
+                            indicator = false;
+                        }
+                }
+                
+                var response = "";
+                for (var i = selected.length - 1; i >= 0; i=i-2) {                    
+                    var first_player = selected[i];
+                    var second_player = selected[i-1];
+                    response ="<li class=\"list-group-item\">"+first_player+"&nbsp;&nbsp;|&nbsp;&nbsp;"+second_player+"</li>";
+                    if ((first_player === undefined) || (first_player == "")) {
+                        response ="<li class=\"list-group-item\">"+second_player+"</li>";
+                    }
+                    if ((second_player === undefined)|| (second_player == "")) {
+                        response ="<li class=\"list-group-item\">"+first_player+"</li>";
+                    }
+                    if (((first_player == "") && (second_player == ""))||((first_player == undefined) && (second_player == undefined))) {
+                        response = "";
+                    }
+                    if (response!=="") {
+                        $('#pairs').append(response);
+                    }
+                }                
+            });
+        </script>
+    </body>
+</html>
